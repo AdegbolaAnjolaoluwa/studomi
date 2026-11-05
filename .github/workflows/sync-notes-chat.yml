@@ -1,0 +1,99 @@
+name: Sync codebase snapshot to Studomi HQ
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout app repo
+        uses: actions/checkout@v4
+        with:
+          path: app
+
+      - name: Checkout notes site repo
+        uses: actions/checkout@v4
+        with:
+          repository: AdegbolaAnjolaoluwa/studomi-notes
+          path: notes
+          token: ${{ secrets.NOTES_REPO_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Regenerate codebase snapshot
+        run: |
+          python3 - <<'PYEOF'
+          import json
+          import os
+
+          APP_ROOT = "app"
+          OUT_PATH = "notes/api/codebase-snapshot.json"
+
+          INCLUDE_EXT = {".tsx", ".ts", ".css", ".json", ".md"}
+          EXCLUDE_DIRS = {"node_modules", ".next", ".git", ".vercel", "fonts", "public", ".github"}
+          EXCLUDE_FILES = {
+              "package-lock.json",
+              "next-env.d.ts",
+              "README.md",
+              "tsconfig.json",
+              ".eslintrc.json",
+              "package.json",
+          }
+          MAX_FILE_BYTES = 40_000
+
+          files = {}
+          for root, dirs, filenames in os.walk(APP_ROOT):
+              dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS and not d.startswith(".")]
+              for fname in filenames:
+                  if fname in EXCLUDE_FILES:
+                      continue
+                  ext = os.path.splitext(fname)[1]
+                  if ext not in INCLUDE_EXT:
+                      continue
+                  full_path = os.path.join(root, fname)
+                  rel_path = os.path.relpath(full_path, APP_ROOT)
+                  try:
+                      if os.path.getsize(full_path) > MAX_FILE_BYTES:
+                          continue
+                      with open(full_path, "r", encoding="utf-8") as f:
+                          content = f.read()
+                  except Exception as e:
+                      print(f"skip {rel_path}: {e}")
+                      continue
+                  lines = [ln.rstrip() for ln in content.split("\n")]
+                  lines = [ln for ln in lines if ln.strip() != ""]
+                  files[rel_path] = "\n".join(lines)
+
+          snapshot = {"generated_from": "studomi/app", "file_count": len(files), "files": files}
+          os.makedirs(os.path.dirname(OUT_PATH), exist_ok=True)
+          with open(OUT_PATH, "w", encoding="utf-8") as f:
+              json.dump(snapshot, f, indent=0)
+
+          total = sum(len(v) for v in files.values())
+          print(f"Snapshotted {len(files)} files, {total:,} bytes")
+          PYEOF
+
+      - name: Deploy notes site to Vercel
+        working-directory: notes
+        run: |
+          npm install -g vercel@latest
+          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+          vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+          vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: Commit updated snapshot back to notes repo
+        working-directory: notes
+        run: |
+          git config user.name "studomi-bot"
+          git config user.email "bot@studomi.app"
+          git add api/codebase-snapshot.json
+          git diff --staged --quiet || git commit -m "Auto-update codebase snapshot from app push"
+          git push
