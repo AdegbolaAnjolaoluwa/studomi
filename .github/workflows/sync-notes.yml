@@ -1,0 +1,24 @@
+name: Sync to studomi-notes
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout studomi
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push mirror to studomi-notes
+        env:
+          TOKEN: ${{ secrets.NOTES_REPO_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote add notes "https://x-access-token:${TOKEN}@github.com/AdegbolaAnjolaoluwa/studomi-notes.git"
+          git push notes HEAD:main --force
