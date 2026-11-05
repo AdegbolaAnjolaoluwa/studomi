@@ -1,17 +1,19 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Manrope } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const bricolage = Bricolage_Grotesque({
-  subsets: ["latin"],
+const bricolage = localFont({
+  src: "./fonts/BricolageGrotesque-Variable.woff2",
   variable: "--font-bricolage",
-  weight: ["700", "800"],
+  weight: "400 800",
+  display: "swap",
 });
 
-const manrope = Manrope({
-  subsets: ["latin"],
+const manrope = localFont({
+  src: "./fonts/Manrope-Variable.woff2",
   variable: "--font-manrope",
-  weight: ["400", "500", "600", "700", "800"],
+  weight: "200 800",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
