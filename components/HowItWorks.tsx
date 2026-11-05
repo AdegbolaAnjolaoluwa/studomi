@@ -4,7 +4,7 @@ const steps = [
   {
     title: "Select your university",
     body: "Choose your school as the reference point. Every search and distance is calculated from there.",
-    chips: ["University of Lagos", "Covenant University"],
+    chips: ["Nile University, Abuja", "Baze University, Abuja"],
   },
   {
     title: "Search and filter",

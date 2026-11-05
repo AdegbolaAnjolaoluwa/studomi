@@ -1,10 +1,10 @@
 import SectionHead from "./SectionHead";
 
 const listings = [
-  { name: "Greenview Lodge", distance: "0.6 km", rent: "₦180,000", water: "4.8", security: "4.9", reviews: 27 },
-  { name: "Unity Court", distance: "1.1 km", rent: "₦145,000", water: "3.9", security: "4.2", reviews: 14 },
-  { name: "Palm Residences", distance: "0.9 km", rent: "₦210,000", water: "4.6", security: "4.7", reviews: 31 },
-  { name: "Westgate Hostel", distance: "1.6 km", rent: "₦120,000", water: "4.1", security: "3.8", reviews: 9 },
+  { name: "Sunview Lodge", distance: "1.2 km", rent: "₦380,000", water: "4.8", security: "4.9", reviews: 27 },
+  { name: "Jabi Heights", distance: "2.1 km", rent: "₦420,000", water: "3.9", security: "4.2", reviews: 14 },
+  { name: "Kado Court", distance: "2.8 km", rent: "₦350,000", water: "4.6", security: "4.7", reviews: 31 },
+  { name: "Katampe Residence", distance: "3.4 km", rent: "₦310,000", water: "4.1", security: "3.8", reviews: 9 },
 ];
 
 export default function AskSection() {
@@ -13,7 +13,7 @@ export default function AskSection() {
       <SectionHead
         eyebrow="See it in action"
         title="Compare hostels the way you'd compare anything else."
-        sub="Side by side, with the numbers that actually matter — not a wall of photos."
+        sub="Side by side, with the numbers that actually matter — not a wall of photos. Example listings near Nile University, Abuja."
       />
 
       <div className="overflow-x-auto rounded-[20px] border border-line bg-white shadow-[0_20px_50px_rgba(16,35,28,0.06)]">

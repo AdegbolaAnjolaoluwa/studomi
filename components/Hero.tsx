@@ -34,8 +34,8 @@ export default function Hero() {
           </div>
 
           <p className="mt-6 text-base text-ink-soft">
-            Built for one university at a time, starting with{" "}
-            <b className="text-ink">your campus</b>.
+            Built for one university at a time, starting in Abuja with{" "}
+            <b className="text-ink">Nile University and Baze University</b>.
           </p>
           <p className="mt-2 text-sm text-ink-soft">
             Hostel data verified by admins · Reviews from real residents ·
@@ -51,8 +51,8 @@ export default function Hero() {
 
 function Ledger() {
   const rows = [
-    ["Distance to campus", "0.6 km"],
-    ["Annual rent", "₦180,000"],
+    ["Distance to campus", "1.2 km"],
+    ["Annual rent", "₦380,000"],
     ["Room type", "Self-contain"],
     ["Electricity", "4.6 / 5"],
     ["Water supply", "4.8 / 5"],
@@ -65,10 +65,10 @@ function Ledger() {
       <div className="flex items-center justify-between border-b border-line bg-white px-7 py-6">
         <div>
           <div className="font-display text-[22px] font-extrabold text-black">
-            Greenview Lodge
+            Sunview Lodge
           </div>
           <div className="mt-1 text-[13.5px] text-black">
-            University of Lagos
+            Nile University, Abuja
           </div>
         </div>
         <span className="flex h-9 w-9 items-center justify-center rounded-full bg-accent text-base text-accent-ink">
