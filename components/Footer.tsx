@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -44,9 +45,9 @@ export default function Footer() {
             <a href="#faq" className="font-semibold hover:underline">
               FAQ
             </a>
-            <a href="#" className="font-semibold hover:underline">
+            <Link href="/privacy" className="font-semibold hover:underline">
               Privacy
-            </a>
+            </Link>
           </div>
         </div>
       </div>
